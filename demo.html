@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="三个原生实现的交互示例：笔记标签过滤、配色切换、专注倒计时。">
+<title>交互演示 · 示例项目</title>
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./demo.css">
+<script>
+(function () {
+  var value = null;
+  try { value = new URLSearchParams(window.location.search).get('project'); } catch (error) { value = null; }
+  if (value !== 'notes' && value !== 'palette' && value !== 'focus') { value = 'notes'; }
+  document.documentElement.setAttribute('data-project', value);
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<header class="site-head">
+  <div class="wrap head-inner">
+    <a class="brand" href="./index.html#work">返回作品集</a>
+    <p class="tag-note">示例项目 · 为本站制作的交互演示，非个人历史成果</p>
+  </div>
+</header>
+
+<main id="main" class="wrap" tabindex="-1">
+  <h1 class="page-title">交互演示</h1>
+  <p class="page-sub">三个原生实现的小例子，零依赖、纯静态，切换下面的标签查看。</p>
+
+  <nav class="switcher" aria-label="示例切换">
+    <a class="switch-link" data-project="notes" href="./demo.html?project=notes">笔记过滤</a>
+    <a class="switch-link" data-project="palette" href="./demo.html?project=palette">配色切换</a>
+    <a class="switch-link" data-project="focus" href="./demo.html?project=focus">专注计时</a>
+  </nav>
+
+  <section id="panel-notes" class="panel" aria-labelledby="notes-h">
+    <p class="tag-note">示例项目 · 为本站制作的交互演示，非个人历史成果</p>
+    <h2 class="panel-title" id="notes-h" tabindex="-1">笔记过滤</h2>
+    <p class="panel-desc">按标签筛选，输入新笔记。所有数据只存在当前页面的内存里，刷新即清空。</p>
+
+    <div class="tag-filter" id="tagFilter" role="group" aria-label="按标签筛选笔记"></div>
+
+    <form class="note-form" id="noteForm" novalidate>
+      <label class="field" for="noteText">笔记内容</label>
+      <input class="input" id="noteText" name="noteText" type="text" maxlength="120" autocomplete="off" placeholder="写点什么…">
+      <label class="field" for="noteTag">标签</label>
+      <select class="input" id="noteTag" name="noteTag"></select>
+      <button class="btn btn-primary" type="submit">添加笔记</button>
+    </form>
+
+    <p class="status" id="notesStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+
+    <ul class="note-list" id="noteList" aria-label="笔记列表"></ul>
+
+    <p class="panel-back">
+      <a class="back-link" href="./index.html#work">返回作品集 · ./index.html#work</a>
+    </p>
+  </section>
+
+  <section id="panel-palette" class="panel" aria-labelledby="palette-h">
+    <p class="tag-note">示例项目 · 为本站制作的交互演示，非个人历史成果</p>
+    <h2 class="panel-title" id="palette-h" tabindex="-1">配色切换</h2>
+    <p class="panel-desc">三套配色方案，点击任意色块即可复制对应的 HEX 值。</p>
+
+    <div class="scheme-tabs" id="schemeTabs" role="group" aria-label="配色方案"></div>
+
+    <div class="preview" id="preview">
+      <p class="preview-kicker">配色预览</p>
+      <h3 class="preview-title">薄荷绿与暖橙</h3>
+      <p class="preview-text">这段文字、按钮和标签会跟随所选配色一起变化。</p>
+      <p class="preview-actions">
+        <span class="preview-btn">主要按钮</span>
+        <span class="preview-chip">标签</span>
+      </p>
+    </div>
+
+    <ul class="swatch-list" id="swatchList" aria-label="色值与复制"></ul>
+
+    <p class="status" id="paletteStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+
+    <p class="panel-back">
+      <a class="back-link" href="./index.html#work">返回作品集 · ./index.html#work</a>
+    </p>
+  </section>
+
+  <section id="panel-focus" class="panel" aria-labelledby="focus-h">
+    <p class="tag-note">示例项目 · 为本站制作的交互演示，非个人历史成果</p>
+    <h2 class="panel-title" id="focus-h" tabindex="-1">专注计时</h2>
+    <p class="panel-desc">5 分钟倒计时。按真实时间差计算，切到后台再回来也不会走偏。</p>
+
+    <div class="timer">
+      <p class="timer-time" id="timeDisplay" role="timer" aria-live="off">05:00</p>
+      <div class="progress" id="progressTrack" role="progressbar" aria-label="剩余时间" aria-valuemin="0" aria-valuemax="300" aria-valuenow="300" aria-valuetext="剩余 5 分 0 秒">
+        <span class="progress-fill" id="progressFill"></span>
+      </div>
+      <p class="timer-state" id="timerState">未开始</p>
+    </div>
+
+    <div class="timer-actions">
+      <button class="btn btn-primary" id="startPause" type="button">开始</button>
+      <button class="btn" id="resetBtn" type="button">重置</button>
+    </div>
+
+    <p class="status" id="focusStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+
+    <p class="panel-back">
+      <a class="back-link" href="./index.html#work">返回作品集 · ./index.html#work</a>
+    </p>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-inner">
+    <p class="foot-note">示例项目 · 为本站制作的交互演示，非个人历史成果</p>
+    <a class="back-link" href="./index.html#work">返回作品集 · ./index.html#work</a>
+  </div>
+</footer>
+
+<script src="./demo.js"></script>
+</body>
+</html>
